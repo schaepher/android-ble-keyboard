@@ -19,7 +19,7 @@
         android:allowBackup="true"
         android:label="BLE Keyboard"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
-        
+
         <!-- 使用 GoNativeActivity 作为入口 -->
         <activity android:name="org.golang.app.GoNativeActivity"
             android:label="BLE Keyboard"
@@ -29,5 +29,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 定义 Go 库的名称 -->
+        <meta-data
+            android:name="android.app.lib_name"
+            android:value="main" />
     </application>
 </manifest>
