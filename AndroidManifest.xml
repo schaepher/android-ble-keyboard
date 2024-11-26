@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.blekeyboard">
 
-    <!-- 配置最低和目标 SDK 版本 -->
+    <!-- 设置最低和目标 SDK 版本 -->
     <uses-sdk
         android:minSdkVersion="33"
         android:targetSdkVersion="34" />
 
-    <!-- 蓝牙权限 -->
+    <!-- 添加所需权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
@@ -20,8 +20,10 @@
         android:label="BLE Keyboard"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
         
-        <!-- Main Activity -->
-        <activity android:name="GoNativeActivity">
+        <!-- 使用 GoNativeActivity 作为入口 -->
+        <activity android:name="org.golang.app.GoNativeActivity"
+            android:label="BLE Keyboard"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
