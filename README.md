@@ -1,3 +1,3 @@
 # android-ble-keyboard
 
-build
+build 2
