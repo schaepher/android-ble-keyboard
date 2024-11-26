@@ -28,11 +28,12 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- 定义 Go 库的名称 -->
-        <meta-data
+            <!-- 定义 Go 库的名称 -->
+            <meta-data
             android:name="android.app.lib_name"
             android:value="main" />
+        </activity>
+
+        
     </application>
 </manifest>
