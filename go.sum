@@ -25,8 +25,8 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/raff/goble v0.0.0-20190909174656-72afc67d6a99 h1:JtoVdxWJ3tgyqtnPq3r4hJ9aULcIDDnPXBWxZsdmqWU=
 github.com/raff/goble v0.0.0-20190909174656-72afc67d6a99/go.mod h1:CxaUhijgLFX0AROtH5mluSY71VqpjQBw9JXE2UKZmc4=
 github.com/russross/blackfriday/v2 v2.0.1/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
-github.com/schaepher/mobile v0.0.0-20241126143128-51b22fd5e8f1 h1:JwPiQEpWWkGeevIgL7zWuN1WHPopcYtBs0ZaT1/vd0A=
-github.com/schaepher/mobile v0.0.0-20241126143128-51b22fd5e8f1/go.mod h1:4Mb4A4qPHrra2y9IZVS2BECVFID7fuTm4IEiJymDbDk=
+github.com/schaepher/mobile v0.0.0-20241126150646-fd9d235fa02f h1:oG5G/FwyPnJFHnb4ea8Yw/RtyedYlCs5NE4UWb82eBc=
+github.com/schaepher/mobile v0.0.0-20241126150646-fd9d235fa02f/go.mod h1:0BqsqpqWfi70NZJuL1S2NuS60nXTw63jxRRkasaCh3g=
 github.com/shurcooL/sanitized_anchor_name v1.0.0/go.mod h1:1NzhyTcUVG4SuEtjjoZeVRXNmyL/1OwPU0+IJeTBvfc=
 github.com/sirupsen/logrus v1.5.0 h1:1N5EYkVAPEywqZRJd7cwnRtCb6xJx7NH3T3WUTF980Q=
 github.com/sirupsen/logrus v1.5.0/go.mod h1:+F7Ogzej0PZc/94MaYx/nvG9jOFMD2osvC3s+Squfpo=
