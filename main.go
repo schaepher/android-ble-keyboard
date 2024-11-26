@@ -1,14 +1,14 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"log"
 	"net/http"
-	"context"
 
-	"golang.org/x/mobile/app"
-	"golang.org/x/mobile/event/lifecycle"
-	"golang.org/x/mobile/event/paint"
+	"github.com/schaepher/mobile/app"
+	"github.com/schaepher/mobile/event/lifecycle"
+	"github.com/schaepher/mobile/event/paint"
 
 	"github.com/go-ble/ble"
 	"github.com/go-ble/ble/examples/lib/dev"
@@ -56,7 +56,7 @@ func startBLEService() {
 	ble.SetDefaultDevice(d)
 
 	// Create HID service
-	hidSvc := ble.NewService(ble.MustParse("1812")) // HID Service UUID
+	hidSvc := ble.NewService(ble.MustParse("1812"))            // HID Service UUID
 	reportChar := ble.NewCharacteristic(ble.MustParse("2A4D")) // Report Characteristic UUID
 	reportChar.HandleNotify(&notifyHandler{})
 	hidSvc.AddCharacteristic(reportChar)
