@@ -1,11 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.blekeyboard">
 
-    <!-- 设置最低和目标 SDK 版本 -->
-    <uses-sdk
-        android:minSdkVersion="33"
-        android:targetSdkVersion="34" />
-
     <!-- 添加所需权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
