@@ -28,12 +28,12 @@ jobs:
           export PATH=$JAVA_HOME/bin:$PATH
           java -version
 
-      # Step 3: 安装 Android NDK r21
-      - name: Install Android NDK r21
+      # Step 3: 安装 Android NDK r27
+      - name: Install Android NDK r27
         run: |
-          wget https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip
-          unzip android-ndk-r21d-linux-x86_64.zip -d $HOME/android-ndk
-          export ANDROID_NDK_HOME=$HOME/android-ndk/android-ndk-r21d
+          wget https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
+          unzip android-ndk-r27c-linux.zip -d $HOME/android-ndk
+          export ANDROID_NDK_HOME=$HOME/android-ndk/android-ndk-r27c
           export PATH=$ANDROID_NDK_HOME:$PATH
           echo "ANDROID_NDK_HOME=$ANDROID_NDK_HOME"
 
@@ -47,14 +47,14 @@ jobs:
       - name: Install Go Mobile
         run: |
           go install golang.org/x/mobile/cmd/gomobile@latest
-          export ANDROID_NDK_HOME=$HOME/android-ndk/android-ndk-r21d
+          export ANDROID_NDK_HOME=$HOME/android-ndk/android-ndk-r27c
           gomobile init
 
       # Step 6: 构建 APK
       - name: Build APK
         run: |
-           export ANDROID_NDK_HOME=$HOME/android-ndk/android-ndk-r21d
-           gomobile build -target=android/arm64 -androidapi=21 -o ble_keyboard.apk
+           export ANDROID_NDK_HOME=$HOME/android-ndk/android-ndk-r27c
+           gomobile build -target=android/arm64 -androidapi=34 -o ble_keyboard.apk
 
       # Step 7: 上传 APK 到 GitHub Actions 的 artifacts
       - name: Upload APK
