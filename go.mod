@@ -8,7 +8,7 @@ require (
 	github.com/go-ble/ble v0.0.0-20240122180141-8c5522f54333
 	golang.org/x/mobile v0.0.0-20241108191957-fa514ef75a0f
 )
-
+replace  golang.org/x/mobile v0.0.0-20241108191957-fa514ef75a0f => github.com/igadmg/mobile fix-android-minsdk-usage-in-binres 
 require (
 	github.com/JuulLabs-OSS/cbgo v0.0.1 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.1 // indirect
