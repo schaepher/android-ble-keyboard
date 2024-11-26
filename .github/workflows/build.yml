@@ -55,7 +55,7 @@ jobs:
         run: |
            export ANDROID_NDK_HOME=$HOME/android-ndk/android-ndk-r27c
            go mod tidy
-           gomobile build -target=android/arm64 -androidapi=34 -o ble_keyboard.apk
+           gomobile build -v -target=android/arm64 -androidapi 34 -o ble_keyboard.apk
 
       # Step 7: 上传 APK 到 GitHub Actions 的 artifacts
       - name: Upload APK
