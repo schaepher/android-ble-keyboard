@@ -6,7 +6,7 @@ toolchain go1.22.9
 
 require (
 	github.com/go-ble/ble v0.0.0-20240122180141-8c5522f54333
-	golang.org/x/mobile v0.0.0-20241126150646-fd9d235fa02f
+	golang.org/x/mobile v0.0.0-20241108191957-fa514ef75a0f
 )
 
 require (
@@ -21,6 +21,5 @@ require (
 	github.com/sirupsen/logrus v1.5.0 // indirect
 	golang.org/x/exp/shiny v0.0.0-20230817173708-d852ddb80c63 // indirect
 	golang.org/x/image v0.22.0 // indirect
-	golang.org/x/mobile v0.0.0-20201217150744-e6ae53a27f4f // indirect
 	golang.org/x/sys v0.27.0 // indirect
 )
