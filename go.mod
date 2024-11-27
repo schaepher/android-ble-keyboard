@@ -6,7 +6,7 @@ toolchain go1.22.9
 
 require (
 	github.com/go-ble/ble v0.0.0-20240122180141-8c5522f54333
-	github.com/schaepher/mobile v0.0.0-20241126150646-fd9d235fa02f
+	golang.org/x/mobile v0.0.0-20241126150646-fd9d235fa02f
 )
 
 require (

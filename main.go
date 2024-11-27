@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/schaepher/mobile/app"
-	"github.com/schaepher/mobile/event/lifecycle"
-	"github.com/schaepher/mobile/event/paint"
+	"golang.org/x/mobile/app"
+	"golang.org/x/mobile/event/lifecycle"
+	"golang.org/x/mobile/event/paint"
 
 	"github.com/go-ble/ble"
 	"github.com/go-ble/ble/examples/lib/dev"
