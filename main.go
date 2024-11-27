@@ -31,6 +31,7 @@ func main() {
 			case lifecycle.Event:
 				switch e.Crosses(lifecycle.StageVisible) {
 				case lifecycle.CrossOn:
+					log.Println("App started")
 					// Start BLE service and HTTP server
 					go startBLEService()
 					go startHTTPServer()
