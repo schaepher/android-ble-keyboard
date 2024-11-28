@@ -52,7 +52,8 @@ func startBLEService() {
 	// Initialize BLE device
 	d, err := dev.NewDevice("default")
 	if err != nil {
-		log.Fatalf("Failed to initialize BLE device: %v", err)
+		log.Println("Failed to initialize BLE device: %v", err)
+		return
 	}
 	ble.SetDefaultDevice(d)
 
@@ -67,7 +68,8 @@ func startBLEService() {
 	log.Println("Starting BLE advertisement...")
 	err = ble.AdvertiseNameAndServices(context.Background(), "BLE Keyboard", hidSvc.UUID)
 	if err != nil {
-		log.Fatalf("Failed to start advertising: %v", err)
+		log.Println("Failed to start advertising: %v", err)
+		return
 	}
 }
 
