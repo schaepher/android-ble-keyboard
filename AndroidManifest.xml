@@ -14,7 +14,13 @@ license that can be found in the LICENSE file.
 	     specify the permission requirement. See the following page for
 	     details.
 	     http://developer.android.com/guide/topics/manifest/manifest-intro.html#perms -->
-	<uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
 	<application android:label="network" android:debuggable="true">
 
