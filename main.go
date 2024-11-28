@@ -54,9 +54,10 @@ func main() {
 	app.Main(func(a app.App) {
 	// checkNetwork runs only once when the app first loads.
 	go checkNetwork()
-        for e := range a.Events() {
 		var glctx gl.Context
 		det, sz := determined, size.Event{}
+        for e := range a.Events() {
+		
 			switch e := a.Filter(e).(type) {
 			case lifecycle.Event:
 				switch e.Crosses(lifecycle.StageVisible) {
