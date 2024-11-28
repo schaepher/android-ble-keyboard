@@ -1,129 +1,119 @@
-// Copyright 2015 The Go Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-//go:build darwin || linux || windows
-
-// An app that paints green if golang.org is reachable when the app first
-// starts, or red otherwise.
-//
-// In order to access the network from the Android app, its AndroidManifest.xml
-// file must include the permission to access the network.
-//
-//	http://developer.android.com/guide/topics/manifest/manifest-intro.html#perms
-//
-// The gomobile tool auto-generates a default AndroidManifest file by default
-// unless the package directory contains the AndroidManifest.xml. Users can
-// customize app behavior, such as permissions and app name, by providing
-// the AndroidManifest file. This is irrelevant to iOS.
-//
-// Note: This demo is an early preview of Go 1.5. In order to build this
-// program as an Android APK using the gomobile tool.
-//
-// See http://godoc.org/golang.org/x/mobile/cmd/gomobile to install gomobile.
-//
-// Get the network example and use gomobile to build or install it on your device.
-//
-//	$ go get -d golang.org/x/mobile/example/network
-//	$ gomobile build golang.org/x/mobile/example/network # will build an APK
-//
-//	# plug your Android device to your computer or start an Android emulator.
-//	# if you have adb installed on your machine, use gomobile install to
-//	# build and deploy the APK to an Android target.
-//	$ gomobile install golang.org/x/mobile/example/network
-//
-// Switch to your device or emulator to start the network application from
-// the launcher.
-// You can also run the application on your desktop by running the command
-// below. (Note: It currently doesn't work on Windows.)
-//
-//	$ go install golang.org/x/mobile/example/network && network
 package main
 
 import (
-	"net/http"
+	"context"
+	"errors"
 	"log"
+	"net/http"
 
 	"golang.org/x/mobile/app"
 	"golang.org/x/mobile/event/lifecycle"
 	"golang.org/x/mobile/event/paint"
-	"golang.org/x/mobile/event/size"
-	"golang.org/x/mobile/gl"
+
+	"github.com/go-ble/ble"
+	"github.com/go-ble/ble/examples/lib/dev"
 )
+
+// HID report for "A" key press and release
+var (
+	hidKeyPressA  = []byte{0xA1, 0x01, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00} // Press 'A'
+	hidKeyRelease = []byte{0xA1, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00} // Release
+)
+
+// Global notifier for BLE notifications
+var notifier ble.Notifier
 
 func main() {
 	app.Main(func(a app.App) {
-		var glctx gl.Context
-		det, sz := determined, size.Event{}
-		for {
-			select {
-			case <-det:
-				a.Send(paint.Event{})
-				det = nil
-
-			case e := <-a.Events():
-				switch e := a.Filter(e).(type) {
-				case lifecycle.Event:
-					switch e.Crosses(lifecycle.StageVisible) {
+		// No OpenGL context handling if not needed
+		for e := range a.Events() {
+			switch e := a.Filter(e).(type) {
+			case lifecycle.Event:
+				switch e.Crosses(lifecycle.StageVisible) {
 				case lifecycle.CrossOn:
+					log.Println("App started")
 					// Start BLE service and HTTP server
-					glctx, _ = e.DrawContext.(gl.Context)
-						go startHTTPServer()
+					go startBLEService()
+					go startHTTPServer()
 				case lifecycle.CrossOff:
 					// Stop the app
-				
+					log.Println("App stopped")
 					return
 				}
-				
-				case size.Event:
-					sz = e
-				case paint.Event:
-					if glctx == nil {
-						continue
-					}
-					onDraw(glctx, sz)
-					a.Publish()
-				}
+			case paint.Event:
+				// Handle drawing logic here, if needed
+				a.Publish()
 			}
 		}
 	})
-
 }
 
-var (
-	determined = make(chan struct{})
-	ok         = false
-)
-
-func checkNetwork() {
-	defer close(determined)
-
-	_, err := http.Get("https://www.baidu.com/")
+func startBLEService() {
+	// Initialize BLE device
+	d, err := dev.NewDevice("default")
 	if err != nil {
-		return
+		log.Fatalf("Failed to initialize BLE device: %v", err)
 	}
-	ok = true
+	ble.SetDefaultDevice(d)
+
+	// Create HID service
+	hidSvc := ble.NewService(ble.MustParse("1812"))            // HID Service UUID
+	reportChar := ble.NewCharacteristic(ble.MustParse("2A4D")) // Report Characteristic UUID
+	reportChar.HandleNotify(&notifyHandler{})
+	hidSvc.AddCharacteristic(reportChar)
+	ble.AddService(hidSvc)
+
+	// Start advertising
+	log.Println("Starting BLE advertisement...")
+	err = ble.AdvertiseNameAndServices(context.Background(), "BLE Keyboard", hidSvc.UUID)
+	if err != nil {
+		log.Fatalf("Failed to start advertising: %v", err)
+	}
 }
 
-func onDraw(glctx gl.Context, sz size.Event) {
-	select {
-	case <-determined:
-		if ok {
-			glctx.ClearColor(0, 1, 0, 1)
-		} else {
-			glctx.ClearColor(1, 0, 0, 1)
-		}
-	default:
-		glctx.ClearColor(0, 0, 0, 1)
-	}
-	glctx.Clear(gl.COLOR_BUFFER_BIT)
-}
 func startHTTPServer() {
 	http.HandleFunc("/enter", func(w http.ResponseWriter, r *http.Request) {
-		
+		log.Println("Received HTTP request: Sending HID report")
+		if notifier == nil {
+			http.Error(w, "Notifier not initialized", http.StatusInternalServerError)
+			return
+		}
+		if err := sendHIDReport(hidKeyPressA); err != nil {
+			http.Error(w, "Failed to send key press", http.StatusInternalServerError)
+			return
+		}
+		if err := sendHIDReport(hidKeyRelease); err != nil {
+			http.Error(w, "Failed to release key", http.StatusInternalServerError)
+			return
+		}
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Key A sent"))
 	})
 	log.Println("HTTP server running at http://localhost:8080/enter")
 	log.Fatal(http.ListenAndServe(":19999", nil))
+}
+
+// notifyHandler implements ble.NotifyHandler
+type notifyHandler struct{}
+
+func (h *notifyHandler) ServeNotify(req ble.Request, n ble.Notifier) {
+	log.Println("Notifier initialized")
+	notifier = n // Save the notifier for future use
+	for {
+		select {
+		case <-n.Context().Done():
+			log.Println("Notifier closed")
+			notifier = nil
+			return
+		}
+	}
+}
+
+// sendHIDReport sends the specified HID report using the notifier
+func sendHIDReport(report []byte) error {
+	if notifier == nil {
+		return errors.New("notifier not initialized")
+	}
+	_, err := notifier.Write(report)
+	return err
 }
