@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	"fmt"
 	"net/http"
 
 	"golang.org/x/mobile/app"
@@ -48,11 +49,13 @@ func main() {
 	})
 }
 
+var gerr error
+
 func startBLEService() {
 	// Initialize BLE device
 	d, err := dev.NewDevice("default")
 	if err != nil {
-		log.Println("Failed to initialize BLE device: %v", err)
+		gerr = fmt.Errorf("Failed to initialize BLE device: %v", err)
 		return
 	}
 	ble.SetDefaultDevice(d)
@@ -68,7 +71,7 @@ func startBLEService() {
 	log.Println("Starting BLE advertisement...")
 	err = ble.AdvertiseNameAndServices(context.Background(), "BLE Keyboard", hidSvc.UUID)
 	if err != nil {
-		log.Println("Failed to start advertising: %v", err)
+		gerr = fmt.Errorf("Failed to start advertising: %v", err)
 		return
 	}
 }
@@ -76,6 +79,9 @@ func startBLEService() {
 func startHTTPServer() {
 	http.HandleFunc("/enter", func(w http.ResponseWriter, r *http.Request) {
 		log.Println("Received HTTP request: Sending HID report")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Key A sent" + gerr.Error()))
+		return
 		if notifier == nil {
 			http.Error(w, "Notifier not initialized", http.StatusInternalServerError)
 			return
