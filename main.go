@@ -42,6 +42,7 @@ package main
 
 import (
 	"net/http"
+	"log"
 
 	"golang.org/x/mobile/app"
 	"golang.org/x/mobile/event/lifecycle"
