@@ -54,6 +54,7 @@ jobs:
       - name: Build APK
         run: |
            export ANDROID_NDK_HOME=$HOME/android-ndk/android-ndk-r27c
+           go mod init ble_keyboard
            go mod tidy
            gomobile build -v -target=android/arm -androidapi 21 -o ble_keyboard.apk
 
