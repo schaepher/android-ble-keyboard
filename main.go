@@ -51,6 +51,7 @@ import (
 )
 
 func main() {
+	app.Main(func(a app.App) {
 	// checkNetwork runs only once when the app first loads.
 	go checkNetwork()
         for e := range a.Events() {
@@ -78,7 +79,7 @@ func main() {
 		
 			}
 		}
-
+}
 }
 
 var (
