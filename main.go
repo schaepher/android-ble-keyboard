@@ -90,7 +90,7 @@ var (
 func checkNetwork() {
 	defer close(determined)
 
-	_, err := http.Get("http://golang.org/")
+	_, err := http.Get("https://www.baidu.com/")
 	if err != nil {
 		return
 	}
