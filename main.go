@@ -68,6 +68,9 @@ func main() {
 					log.Println("App stopped")
 					return
 				}
+				case <-det:
+				a.Send(paint.Event{})
+				det = nil
 			case size.Event:
 					sz = e
 				case paint.Event:
@@ -79,7 +82,7 @@ func main() {
 		
 			}
 		}
-}
+})
 }
 
 var (
