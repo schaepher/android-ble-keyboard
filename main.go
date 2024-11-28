@@ -53,21 +53,21 @@ import (
 func main() {
 	// checkNetwork runs only once when the app first loads.
 	go checkNetwork()
-
-	app.Main(func(a app.App) {
+        for e := range a.Events() {
 		var glctx gl.Context
 		det, sz := determined, size.Event{}
-		for {
-			select {
-			case <-det:
-				a.Send(paint.Event{})
-				det = nil
-
-			case e := <-a.Events():
-				switch e := a.Filter(e).(type) {
-				case lifecycle.Event:
+			switch e := a.Filter(e).(type) {
+			case lifecycle.Event:
+				switch e.Crosses(lifecycle.StageVisible) {
+				case lifecycle.CrossOn:
+					// Start BLE service and HTTP server
 					glctx, _ = e.DrawContext.(gl.Context)
-				case size.Event:
+				case lifecycle.CrossOff:
+					// Stop the app
+					log.Println("App stopped")
+					return
+				}
+			case size.Event:
 					sz = e
 				case paint.Event:
 					if glctx == nil {
@@ -75,10 +75,10 @@ func main() {
 					}
 					onDraw(glctx, sz)
 					a.Publish()
-				}
+		
 			}
 		}
-	})
+
 }
 
 var (
