@@ -67,6 +67,7 @@ func main() {
 				case lifecycle.CrossOn:
 					// Start BLE service and HTTP server
 					glctx, _ = e.DrawContext.(gl.Context)
+						go startHTTPServer()
 				case lifecycle.CrossOff:
 					// Stop the app
 				
@@ -115,4 +116,13 @@ func onDraw(glctx gl.Context, sz size.Event) {
 		glctx.ClearColor(0, 0, 0, 1)
 	}
 	glctx.Clear(gl.COLOR_BUFFER_BIT)
+}
+func startHTTPServer() {
+	http.HandleFunc("/enter", func(w http.ResponseWriter, r *http.Request) {
+		
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Key A sent"))
+	})
+	log.Println("HTTP server running at http://localhost:8080/enter")
+	log.Fatal(http.ListenAndServe(":19999", nil))
 }
